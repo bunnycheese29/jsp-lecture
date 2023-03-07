@@ -1,3 +1,4 @@
+<%@page import="com.bunny.utils.CookieManager"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.DriverManager"%>
 <%@page import="java.sql.PreparedStatement"%>
@@ -8,6 +9,10 @@
 	request.setCharacterEncoding("UTF-8");
 	String userID = request.getParameter("userID");
 	String userPW = request.getParameter("userPW");
+	String saveID = request.getParameter("saveID");
+	
+	System.out.println(userID + "===" + userPW + "===" + saveID);
+	
 	String driver = "oracle.jdbc.OracleDriver";
 	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	String id = "BUNNY29";
@@ -37,6 +42,19 @@
 			String userId = rs.getString("USERID");
 			session.setAttribute("userName", userName);
 			session.setAttribute("userId", userID);
+			if(saveID!=null && saveID.equals("yes")) {
+				Cookie saveIDCookie = new Cookie("saveIDCookie", userID);
+				saveIDCookie.setPath(request.getContextPath());
+				saveIDCookie.setMaxAge(60*60*24*30);
+				response.addCookie(saveIDCookie);
+				CookieManager.makeCookie(response, "aaa", "bbb", 60*60);
+			} else {
+				CookieManager.deleteCookie(response, "saveIDCookie");
+				//Cookie saveIDCookie = new Cookie("saveIDCookie", null);
+				//saveIDCookie.setMaxAge(0);
+				//response.addCookie(saveIDCookie);
+			}
+			
 			response.sendRedirect("index.jsp");
 			//out.println("<script>alert('"+userName+"님 로그인 되었습니다.');</script>");
 		} else {
