@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@include file="./include/header.jsp" %>
-    <form action="joinProcess.jsp" method="POST">
+<%
+	String userId = (String)session.getAttribute("userId");
+%>
+<%@include file="../include/header.jsp" %>
+    <form action="modifyProcess.jsp" method="POST">
         <table>
             <colgroup>
                 <col style="width:20%">
@@ -10,20 +13,13 @@
                 <tr>
                     <th>아이디</th>
                     <td>
-                        <input type="text" name="userID" id="userID" placeholder="아이디를 입력해 주세요.">
-                   		<button class="btn idCheck">아이디 중복확인</button>
+                        <span><%=userId %></span>
                     </td>
                 </tr>
                 <tr>
                     <th>패스워드</th>
                     <td>
                         <input type="password" name="userPW" id="userPW" placeholder="비밀번호를 입력해 주세요.">
-                    </td>
-                </tr>
-                <tr>
-                    <th>패스워드 확인</th>
-                    <td>
-                        <input type="password" name="userPWConfirm" id="userPWConfirm" placeholder="비밀번호를 다시 입력해 주세요.">
                     </td>
                 </tr>
                 <tr>
@@ -65,39 +61,11 @@
             </tbody>
         </table>
         <div>
-            <button class="btn confirm">회원가입</button>
+            <button class="btn confirm">회원수정</button>
             <button type="reset">취소</button>
         </div>
     </form>
     <script>
-       	$(".idCheck").on("click", function(){
-       		const sendUserID = $("#userID").val();
-       		$.ajax({
-       			url: "idCheck.jsp",
-       			data: {userID : sendUserID},
-       			success: function(response) {
-       				if(parseInt(response.trim()) === 0 ) {
-       					alert("사용 가능한 아이디 입니다.");
-       					$("#userID").attr("readonly", true);
-       				} else {
-       					alert("중복된 아이디 입니다.");
-       					$("#userID").val("");
-       					$("#userID").focus();
-       				}
-       			},
-       			fail : function(error) {
-       				console.log(error);
-       			}
-       		});
-       	} else {
-       		alert("아이디를 입력해 주세요.");
-       		$("#userID").focus();
-       	}
-       	}
-       		return false;
-       	})
-        
-        
         $(".zipCode").on("click", function () {
         new daum.Postcode({
           oncomplete: function (data) {
@@ -144,26 +112,11 @@
         return false;
       });
       $(".confirm").on("click", function () {
-        if ($("#userID").val() === "") {
-          alert("아이디를 입력해주세요.");
-          $("#userID").focus();
-          return false;
-        }
         if ($("#userPW").val() === "") {
           alert("패스워드를 입력해주세요.");
           $("#userPW").focus();
           return false;
         }
-        if ($("#userPWConfirm").val() === "") {
-          alert("패스워드 확인을 해주세요.");
-          $("#userPWConfirm").focus();
-          return false;
-        }
-        if ($("#userPWConfirm").val() !== $("#userPW").val()) {
-          alert("패스워드가 같지 않습니다.");
-          $("#userPWConfirm").focus();
-          return false;
-        }
       });
     </script>
-    <%@include file="./include/footer.jsp" %>
+    <%@include file="../include/footer.jsp" %>
