@@ -11,9 +11,43 @@ model1: - jsp 코드 다 작성
 model2: - jsp는 view로만 활용
 		- 코드 분리 / mvc (model view controller)
 
+pageContext > request > session > application
+attribute로 보내면 object니까 받을 때 무조건 (String) 형 변환을 시켜줘야함
+
+(1) pstmt.executeUpdate, (2) pstmt.executeQuery
+pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, memberDto.getUserId());
+			pstmt.setString(2, memberDto.getUserPw());
+			pstmt.setString(3, memberDto.getUserName());
+			pstmt.setString(4, memberDto.getUserEmail());
+			pstmt.setString(5, memberDto.getUserHp());
+			pstmt.setInt(6, memberDto.getUserZipcode());
+			pstmt.setString(7, memberDto.getAddress());
+			result = pstmt.executeUpdate();
+
+여기에 변수를 만들어놔야함
+pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "userId");
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				(변수 들어갈 곳) result = rs.getInt("COUNT");
+			}
+
 @WebServlet("/member/join.do) / Mapping한다고 함
 - WEB-INF 폴더에 파일을 만들면 외부에서 접근 불가 (파일명을 주소창에 써도 안 나옴)
 
 - index에서 디렉토리를 지정할 때 그 주소와 Controller에 있는 @WebServlet에 있는 주소랑 동일시 해야함
+- Process로 넘어갈 때 <form action="/">주소랑 ProcessController에 있는 @WebServlet에 있는 주소랑 동일시
 
-Servlet 만들 때 doGet + doPost = service
+- Servlet 만들 때 doGet + doPost = service
+
+- Dao가 Dto를 받아서 db에 넣고 결과 받기
+
+- Dto에는 sql database에 있는 항목 그대로 적기 
+> Generate Constructor using all fields & super class
+> Getter Setter (select all)
+> toString
+
+- Dao가 db에 crud
+
+maven repository > gson (자바 오브젝트를 json으로 변환)
